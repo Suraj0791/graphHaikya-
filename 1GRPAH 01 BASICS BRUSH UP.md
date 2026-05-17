@@ -1,4 +1,7 @@
 
+
+
+
 # 🚀 GRAPH REPRESENTATION (THE BEGINNING)
 
 ## 🤔 Kaha se shuruwat karein?
@@ -161,3 +164,26 @@ Memory Limit Exceeded (MLE) ka darr!
 
 
 
+
+
+**Adjacency Matrix** — For dense graphs or when you need O(1) edge lookup
+
+cpp
+
+```cpp
+vector<vector<int>> mat(n, vector<int>(n, 0));
+mat[u][v] = 1; // or weight
+```
+
+**When:** n ≤ 1000 and you need to check "is edge (u,v) present?" frequently. Floyd-Warshall needs this.
+
+**Edge List** — For algorithms that process edges directly
+
+cpp
+
+```cpp
+vector<tuple<int,int,int>> edges; // {weight, u, v}
+edges.push_back({w, u, v});
+```
+
+**When:** Kruskal's MST, Bellman-Ford.

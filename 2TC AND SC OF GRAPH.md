@@ -55,3 +55,6 @@ _Time = N baar node par gaye **+** Total mila kar E baar loop chala =_ **`O(N
 
 - Standard Graph (DFS/BFS): **`O(N + E)`**
 - Grid Questions: Total nodes hain `R*C`. Ek cell ke max 4 neighbors hain. TC = `O(R*C [Nodes] + 4*(R*C) [Edges])`. Constant `4` ko hataya toh TC = **`O(R * C)`**.
+
+
+
