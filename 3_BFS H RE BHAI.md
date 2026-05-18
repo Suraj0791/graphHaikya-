@@ -1,4 +1,5 @@
 
+
 ### Pattern 1 — BFS / Simple Traversal
 
 
@@ -103,6 +104,10 @@ void bfs(int r, int c, grid) {
 2. Ek baar `for` loop ke andar (Padosiyon ke liye).
 
 Jahan Push dikhega, uski agli hi line par Visit/Thappa dikhega. Bas yahi ek sachai hai, isko notes mein likh le aur bhagwaan ka naam leke aage badh! 🚀
+
+
+
+
 
 
 
