@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "4 bfs normal.md",
+                "file": "4 bfs CORE.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "4 bfs normal"
+              "title": "4 bfs CORE"
             }
           }
         ],
@@ -202,7 +202,7 @@
   "active": "88a8baa06a26ebac",
   "lastOpenFiles": [
     "3_BFS H RE BHAI.md",
-    "4 bfs normal.md",
+    "4 bfs CORE.md",
     "2TC AND SC OF GRAPH.md",
     "confusions clear/1_REC STACK PASS VALUE VARIBALE CONFUSION.md",
     "1GRPAH 01 BASICS BRUSH UP.md",
