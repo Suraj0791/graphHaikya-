@@ -72,3 +72,5 @@ Three completely different things.
 3. **Browser Back button** — you always return to the most recently opened page.
 4. **Promises** — the stack stores unfinished promises, not completed history.
 5. **Paused work** — a stack frame is a frozen snapshot of what remains to be done.
+
+
