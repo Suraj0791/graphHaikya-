@@ -1,6 +1,8 @@
 
 
 
+
+
 # PHASE 0
 
 ## Why Do Cycles Matter?
@@ -218,3 +220,52 @@ Graph Modeling Bible
 ↓
 
 Graph Operating System
+
+
+
+
+
+# First Law of Cycle Detection
+
+A cycle is not dangerous because it is a circle.
+
+A cycle is dangerous because
+
+> **something depends on itself before it has finished.**
+
+Read that again.
+
+This sentence is more important than the definition.
+
+
+
+
+A cycle is
+
+> **Trying to enter a world that is still being explored.**
+
+Not
+
+"a loop."
+
+Not
+
+"repeated node."
+
+Much deeper.
+
+---
+
+
+
+Did you catch that?
+
+The problem is NOT
+
+visiting again.
+
+The problem is
+
+visiting again
+
+**before finishing.**
