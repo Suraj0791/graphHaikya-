@@ -11,10 +11,14 @@
             "id": "1209764da3dff695",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "6 CYCLE DETECTION.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "6 CYCLE DETECTION"
             }
           }
         ]
