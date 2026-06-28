@@ -409,3 +409,206 @@ dfs(node)
 ```
 
 
+
+
+
+
+
+## Pattern 1
+
+Traversal DFS
+
+Problems
+
+```
+✓ Number of Islands✓ Max Area of Island✓ Provinces✓ Flood Fill✓ Reachability✓ Surrounded Regions
+```
+
+Recognition
+
+Common mistakes
+
+Template
+
+Revision
+
+---
+
+## Pattern 2
+
+Top Down
+
+```
+✓ Path Sum✓ Binary Tree Paths✓ Root to Leaf Sum✓ Prefix State
+```
+
+---
+
+## Pattern 3
+
+Bottom Up
+
+This is HUGE.
+
+```
+✓ Height✓ Diameter✓ Balanced Tree✓ Maximum Path Sum✓ Subtree Sum✓ Subtree Size✓ Largest BST✓ Tree DP Introduction
+```
+
+---
+
+## Pattern 4
+
+Backtracking
+
+```
+✓ Subsets✓ Permutations✓ Combination Sum✓ N Queens✓ Sudoku✓ Rat in Maze
+```
+
+This is where muscle memory comes from.
+
+---
+
+# LEVEL 3 — Advanced DFS Bibles ❌
+
+This is where most people say
+
+> "Advanced Graph."
+
+I don't want to teach them like that.
+
+Each deserves its OWN Bible.
+
+---
+
+## Euler Tour Bible
+
+Not
+
+```
+tintout
+```
+
+No.
+
+Questions like
+
+Why do timestamps exist?
+
+Why does subtree become interval?
+
+Why flatten tree?
+
+---
+
+## Cycle Detection Bible
+
+Not
+
+Gray.
+
+Questions like
+
+Why does Gray imply cycle?
+
+Why not Black?
+
+Why directed different?
+
+---
+
+## Topological Sort Bible
+
+Not
+
+Stack.
+
+Questions like
+
+Why finish order?
+
+Why reverse?
+
+Why DAG only?
+
+Why Kahn also works?
+
+---
+
+## Low Link Bible
+
+One of the hardest.
+
+Questions.
+
+```
+Why low?Why bridge?Why articulation?Why back edge?
+```
+
+---
+
+## SCC Bible
+
+Kosaraju.
+
+Tarjan.
+
+Component graph.
+
+Condensation graph.
+
+---
+
+## Tree DP Bible
+
+This alone deserves
+
+40 pages.
+
+---
+
+## LCA Bible
+
+Euler
+
+Sparse Table
+
+Binary Lifting
+
+RMQ
+
+---
+
+# LEVEL 4 — DFS Recognition Bible ❌
+
+Exactly like BFS.
+
+The final operating system.
+
+Example.
+
+```
+Tree?↓Need subtree answer?↓Bottom Up.↓Need current path?↓Backtracking.↓Need parent info?↓Top Down.
+```
+
+This is the interview OS
+
+
+```
+GRAPH UNIVERSE
+
+            GRAPH PHYSICS
+                  │
+      ┌───────────┴───────────┐
+      │                       │
+GRAPH EXPLORATION      GRAPH OPTIMIZATION
+      │                       │
+      │                       │
+DFS / BFS              Shortest Path / MST
+      │
+      ▼
+ADVANCED DFS WORLD
+      │
+      ▼
+GRAPH OPERATING SYSTEM
+```
+
