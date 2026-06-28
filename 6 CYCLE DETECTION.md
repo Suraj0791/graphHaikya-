@@ -184,3 +184,37 @@ Exactly like BFS.
 
 
 
+
+
+Tree Algorithms
+│
+├── LCA Bible
+├── Tree DP Bible
+└── Tree Pattern Book
+
+↓
+
+Shortest Paths
+│
+├── Dijkstra
+├── Bellman-Ford
+├── Floyd-Warshall
+├── Johnson
+└── Shortest Path Pattern Book
+
+↓
+
+Connectivity
+│
+├── DSU
+├── Kruskal
+├── Prim
+└── Connectivity Pattern Book
+
+↓
+
+Graph Modeling Bible
+
+↓
+
+Graph Operating System
