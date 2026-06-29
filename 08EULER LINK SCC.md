@@ -2397,3 +2397,439 @@ Entry Order.
 Exit isn't useful.
 
 
+
+
+# There's Act
+
+
+
+ually a Third Euler Tour
+
+You'll see this in LCA.
+
+It records
+
+```
+Every visit.
+```
+
+
+
+Question.
+
+Why?
+
+Because LCA wants to know
+
+> **How DFS moved**, not just **when nodes were entered**.
+
+We'll study that in the LCA Bible.
+
+Don't mix it with today's Euler Tour.
+
+
+
+# Universal Recognition
+
+Whenever you see a problem...
+
+Ask one question.
+
+---
+
+### Need ancestor?
+
+Brain says
+
+```
+tintout
+```
+
+---
+
+### Need subtree updates?
+
+Brain says
+
+```
+Entry OrderFlattenSegment Tree
+```
+
+---
+
+### Need LCA?
+
+Brain says
+
+```
+Full Euler Walk
+```
+
+---
+
+Different recordings.
+
+Same DFS.
+
+Same physics.
+
+
+```
+DFS
+
+        │
+
+        ▼
+
+Creates Events
+
+        │
+
+        ▼
+
+Euler Tour Records Them
+
+        │
+
+        ├───────────────┐
+
+        ▼               ▼
+
+Timeline         Entry Order
+
+(tin/tout)       (Flatten)
+
+        │               │
+
+        ▼               ▼
+
+Ancestor        Segment Tree
+
+Intervals       Fenwick
+
+Low-Link        Subtree Queries
+
+SCC
+```
+
+
+
+
+Euler Tour doesn't have one template. It has multiple recordings of the same DFS timeline. Choose the recording based on the information your problem needs—not by memorizing code.
+
+
+
+
+
+
+# Recognition Rule #1
+
+## Is the problem talking about an ENTIRE SUBTREE?
+
+Read carefully.
+
+Not
+
+```
+One node
+```
+
+Not
+
+```
+One edge
+```
+
+Not
+
+```
+One path
+```
+
+But
+
+```
+Everything inside a subtree.
+```
+
+Whenever you hear
+
+> Entire subtree
+
+your brain should pause.
+
+---
+
+Example.
+
+```
+Find the sum of every nodeinside u's subtree.
+```
+
+Immediately.
+
+```
+Subtree↓Interval↓Euler
+```
+
+
+
+EXAMPLE :
+Update every node
+inside subtree(u)
+
+
+
+
+
+# Recognition Rule #2
+
+## Are there MANY subtree queries?
+
+Suppose the problem says
+
+```
+Q = 200000
+```
+
+Immediately.
+
+Red flag.
+
+Because
+
+```
+DFS per query
+```
+
+will die.
+
+Your brain should instantly think
+
+```
+Preprocess↓Euler↓Flatten↓Range DS
+```
+
+---
+
+Notice.
+
+Not because Euler is magical.
+
+Because preprocessing pays once.
+
+Exactly like Prefix Sum.
+
+
+
+
+
+# Recognition Rule #3
+
+## Does the problem ask
+
+"Is u ancestor of v?"
+
+Immediately.
+
+Not DFS.
+
+Not recursion.
+
+Not climbing parents.
+
+Think
+
+```
+Interval Containment.
+```
+
+Then
+
+```
+tin[u] <= tin[v]&&tout[v] <= tout[u]
+```
+
+This should become automatic.
+
+---
+
+# Recognition Rule #4
+
+## Can the graph be treated as a rooted tree?
+
+This is important.
+
+Euler Tour works because
+
+DFS creates
+
+nested recursion.
+
+That requires
+
+```
+TreeorRooted Tree
+```
+
+If the graph has arbitrary cycles...
+
+Euler Tour intervals lose meaning.
+
+This is one of the biggest beginner mistakes.
+
+
+
+
+
+# Recognition Rule #5
+
+## Can I replace "subtree" with "range"?
+
+Read this.
+
+```
+Sum of subtree(u)
+```
+
+Mentally rewrite.
+
+```
+Range Sum
+```
+
+If that rewrite makes sense...
+
+Euler is probably involved.
+
+---
+
+# Recognition Rule #6
+
+## Is preprocessing allowed?
+
+Suppose
+
+```
+N = 2e5Q = 2e5
+```
+
+You are allowed
+
+one DFS.
+
+After that
+
+millions of fast queries.
+
+Perfect.
+
+Euler loves
+
+```
+One preprocessing↓Many queries.
+```
+
+
+
+
+
+## Euler?
+
+Solves...
+
+Nothing.
+
+Read that again.
+
+Euler Tour is not a solver.
+
+It is a
+
+```
+Representation Transformer.
+```
+
+Its job is
+
+```
+Tree↓Intervals↓Array
+```
+
+After that
+
+some OTHER algorithm
+
+solves the problem.
+
+This is the biggest conceptual difference
+
+
+```
+                     TREE
+
+                      │
+
+          DFS creates ENTER / EXIT
+
+                      │
+
+                      ▼
+
+               DFS TIMELINE
+
+                      │
+
+          ┌───────────┴───────────┐
+
+          ▼                       ▼
+
+    Timeline Intervals      Entry Order
+
+    tin / tout              Flatten
+
+          │                       │
+
+          ▼                       ▼
+
+ Ancestor Queries         Continuous Subtree
+
+ Interval Containment         Range
+
+          │                       │
+
+          ▼                       ▼
+
+     O(1) Checks         Segment Tree
+
+                          Fenwick Tree
+
+                          Prefix Sum
+```
+
+
+We have discovered that every node has
+
+```
+Discovery Time
+```
+
+and
+
+```
+Finish Time.
+```
+
+A curious person would naturally ask:
+
+> **Can these timestamps tell us something even deeper than ancestor relationships?**
+
+Imagine removing one edge.
+
+Can timestamps tell us whether that edge was the **only bridge** connecting two parts of the graph?
+
+Or imagine removing one vertex.
+
+Can timestamps reveal whether that vertex was **critical** for connectivity?
+
+Those questions give birth to the next member of the DFS Time Family.
