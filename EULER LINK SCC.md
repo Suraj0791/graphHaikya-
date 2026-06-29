@@ -396,3 +396,56 @@ The recursion did.
 
 The timer simply took photographs.
 
+
+
+# The Deepest Mental Model So Far
+
+Imagine every recursive DFS call opens a bracket.
+
+```
+dfs(A)(
+```
+
+
+
+Then
+
+```
+dfs(B)
+(
+```
+
+Then
+
+
+
+```
+dfs(E)()
+```
+
+Back.
+
+Then
+
+```
+dfs(F)()
+```
+
+Back.
+
+
+
+(
+
+    (
+
+        ()
+
+        ()
+
+    )
+
+    ()
+
+)
+
