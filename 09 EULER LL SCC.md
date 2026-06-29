@@ -339,3 +339,273 @@ Notice.
 
 That's an entirely different property.
 
+
+
+
+Completely changed.
+
+Discovery records
+
+History.
+
+Low records
+
+Escape ability.
+
+
+# The Cave Analogy
+
+Imagine caves.
+
+Question.
+
+Standing at D...
+
+Can you escape back to Entrance?
+
+Without retracing your parent edge?
+
+If yes...
+
+Then
+
+```
+low
+```
+
+becomes very small.
+
+If no...
+
+You're trapped.
+
+Then
+
+```
+low=disc
+```
+
+# Why "Minimum"?
+
+Notice the wording.
+
+We always ask
+
+```
+EarliestOldestSmallest Discovery Time
+```
+
+Why?
+
+Because older means
+
+closer to DFS root.
+
+The earliest ancestor is the hardest one to reach.
+
+If you can reach that...
+
+you can obviously reach everyone below it.
+
+So only the minimum matters.
+
+
+
+
+> **`disc[u]` tells us when `u` entered DFS history. `low[u]` tells us how far back in DFS history `u`'s entire subtree can still reach. Discovery is personal; low is collective.**
+
+
+# 📖 LOW-LINK BIBLE
+
+# Chapter 2 — Information Flows Upward
+
+---
+
+> **This is the chapter where `low[]` stops looking magical.**
+
+## DFS Core Bible
+
+We asked:
+
+> **How does a parent know the height of its subtree?**
+
+Answer?
+
+Children compute it first.
+
+Then return it upward.
+
+
+
+
+
+# Imagine DFS Is Real People
+
+Suppose
+
+D discovers a secret tunnel.
+
+```
+Tunnel↓A
+```
+
+Does B know?
+
+No.
+
+B is still waiting.
+
+It has not finished.
+
+---
+
+Who knows?
+
+Only D.
+
+---
+
+When D finishes...
+
+it returns to C.
+
+Question.
+
+Should D keep the secret?
+
+Or tell C?
+
+Obviously tell C.
+
+---
+
+Now C knows.
+
+When C finishes...
+
+it tells B.
+
+Then
+
+B tells A.
+
+Exactly.
+
+Information climbs upward.
+
+---
+
+# This Is Backtracking Again
+
+Remember what we learned months ago?
+
+Backtracking is not just
+
+```
+Going Back.
+```
+
+It is
+
+```
+Returning Information.
+```
+
+Low-Link is another application of exactly that principle.
+
+Nothing new.
+
+---
+
+
+Every node starts by assuming
+
+> "The oldest node I can reach is myself."
+
+That's the default belief.
+
+
+
+
+
+.
+
+# 📖 LOW-LINK BIBLE: The Information Flow
+
+## 1. The Core Mystery: How Does Information Climb?
+
+In the graph $A \to B \to C \to D$ with back edge $D \to A$, **only $D$ discovers the edge.** $B$ and $C$ never see it. Yet, by the end, $B$ knows its `low` value is $1$.
+
+**The Answer:** DFS backtracking is not just "going back." It is a **recursive summary.**
+
+- **Going Down:** We discover nodes and assign `disc[]`.
+    
+- **Coming Back:** We pass knowledge up the chain.
+    
+
+## 2. The Movie: Step-by-Step Dry Run
+
+Tree: $A \to B \to C \to D$ | Back Edge: $D \to A$ | Discovery: $A=1, B=2, C=3, D=4$
+
+1. **DFS reaches $D$:**
+    
+    - `low[D]` starts at `disc[D]` ($4$). Default belief: "The oldest node I can reach is myself."
+        
+    - **$D$ sees back edge to $A$:** $D$ updates `low[D] = min(4, disc[A]) = 1$.
+        
+2. **$D$ returns to $C$:**
+    
+    - $D$ tells $C$: "My subtree reached discovery time $1$."
+        
+    - $C$ updates: `low[C] = min(low[C], low[D]) = min(3, 1) = 1$.
+        
+3. **$C$ returns to $B$:**
+    
+    - $C$ tells $B$: "My subtree reached $1$."
+        
+    - $B$ updates: `low[B] = min(2, 1) = 1$.
+        
+4. **$B$ returns to $A$:**
+    
+    - Information has climbed to the top. Everyone knows.
+        
+
+## 3. The Physics of the Belief System
+
+- **Default Belief (Entry):** `low[u] = disc[u]`.
+    
+- **Recursive Summary (Exit):** `low[u] = min(low[u], low[v])` (inherit child's findings).
+    
+
+## 4. Why This Unifies Everything
+
+You already know this physics. It is a **Bottom-Up DFS**.
+
+|**Algorithm**|**Child Tells Parent**|**Parent Action**|
+|---|---|---|
+|**Height**|"My subtree height is $H$"|Inherit/Add 1|
+|**Diameter**|"My longest branch is $L$"|Inherit/Update Global|
+|**Low-Link**|"My subtree reached time $T$"|Inherit min($T$)|
+
+## 🧠 The Bible Sentence
+
+Discovery times are fixed while DFS goes down (History); Low values are negotiated while DFS comes back up (Reachability). Every parent simply adopts the oldest reachability claim made by its children.
+
+
+```
+// Inside DFS(u)
+low[u] = disc[u]; // Default: I only know myself
+
+for (int v : adj[u]) {
+    if (v == parent) continue; 
+    if (visited[v]) {
+        // BACK EDGE: Found a shortcut!
+        low[u] = min(low[u], disc[v]); 
+    } else {
+        dfs(v, u); 
+        // BACKTRACKING: Inherit child's findings
+        low[u] = min(low[u], low[v]); 
+    }
+}
+```
+
