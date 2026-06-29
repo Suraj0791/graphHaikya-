@@ -152,3 +152,9 @@ Discovery↓Reachability↓low[]
 We haven't defined it yet.
 
 
+
+
+
+Euler Tour tells us when a node entered history. Low-Link asks a deeper question: from this node's subtree, what is the earliest moment in DFS history that is still reachable? Low-Link is not about arrival—it is about the oldest reachable past.
+
+
