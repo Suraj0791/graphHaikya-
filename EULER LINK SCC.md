@@ -939,3 +939,498 @@ is inside u.
 That's it.
 
 
+
+
+A
+
+┌─────────────────────────────┐
+
+     B
+
+     ┌──────────────┐
+
+         E
+
+         ┌─────┐
+
+         └─────┘
+
+     └──────────────┘
+
+└─────────────────────────────┘
+
+
+
+
+Question.
+
+How do you know
+
+E is inside B?
+
+Geometry.
+
+Not graphs.
+
+Exactly the same thing
+
+
+
+
+
+# This Is The Real Compression
+
+Originally
+
+```
+Graph↓DFS↓Find ancestor
+```
+
+Now
+
+```
+Numbers
+↓
+Two comparisons
+↓
+
+
+Answer
+```
+
+Think about how insane that is.
+
+We replaced graph traversal with
+
+```
+4 integers.
+```
+
+
+
+
+New way.
+
+```
+if (tin[u] <= tin[v] &&    tout[v] <= tout[u])
+```
+
+Time
+
+```
+O(1)
+```
+
+No recursion.
+
+No graph.
+
+No traversal.
+
+Just comparisons.
+
+
+
+# But Wait...
+
+Who Paid the Cost?
+
+Nothing is free.
+
+Somebody paid.
+
+Who?
+
+DFS.
+
+The initial Euler Tour.
+
+It computed
+
+```
+tintout
+```
+
+once.
+
+Time
+
+```
+O(N)
+```
+
+After that...
+
+millions of ancestor queries become
+
+```
+O(1)
+```
+
+Classic preprocessing tradeoff.
+
+
+
+
+
+# This Pattern Appears Everywhere
+
+Notice something.
+
+We keep seeing this in algorithms.
+
+---
+
+## Prefix Sum
+
+Pay once.
+
+```
+O(N)
+```
+
+Answer
+
+```
+Range Sum↓O(1)
+```
+
+
+
+
+# The Deeper Truth
+
+We thought
+
+```
+Ancestor=Graph property
+```
+
+Wrong.
+
+It is actually
+
+```
+Ancestor=Interval containment
+```
+
+The graph was just one representation.
+
+Euler Tour found a better one.
+
+
+
+
+
+An ancestor is simply a node whose DFS lifetime completely contains another node's lifetime. After Euler preprocessing, ancestor queries are no longer graph problems—they become interval containment problems solved with two comparisons.
+
+
+
+Right now we can answer:
+
+- ✅ Ancestor queries
+- ✅ Descendant queries
+
+But remember the promise from Chapter 0?
+
+> **How can a tree magically become an array?**
+
+We haven't answered that yet.
+
+In fact, something still seems impossible.
+
+
+
+
+So far we've used **entry and exit timestamps** (`tin` and `tout`) where the timer increments on both enter and exit. This is perfect for understanding **interval containment** and ancestor checks.
+
+However, when we move to **tree flattening** in the next chapter, many implementations switch to a slightly different Euler numbering (recording nodes on entry and using subtree sizes, or recording the Euler order array). That's **not a contradiction**—it's a different way of encoding the same DFS interval idea, optimized for range queries.
+
+
+
+
+# 📖 EULER TOUR BIBLE
+
+# Chapter 5 — How a Tree Magically Becomes an Array
+
+---
+
+
+
+
+# The Promise We Made
+
+Back in Chapter 0, I asked a crazy question.
+
+> **Can we turn this...**
+
+```
+        A
+      /   \
+     B     C
+    / \
+   E   F
+```
+
+> **...into this?**
+
+```
+[ ?, ?, ?, ?, ?, ? ]
+```
+
+Without losing subtree information.
+
+At first, this seems impossible.
+
+A tree is 2-dimensional.
+
+An array is 1-dimensional.
+
+How can one represent the other?
+
+Imagine the tree contains values.
+
+
+        A(5)
+      /      \
+   B(2)      C(7)
+   /   \
+E(1)   F(3)
+
+
+
+
+Now suppose I ask:
+
+> **Find the sum of B's subtree.**
+
+Answer:
+
+```
+B + E + F=2 + 1 + 3 = 6
+```
+
+Easy.
+
+---
+
+Now suppose I ask this **100,000 times**.
+
+Different subtrees.
+
+Different updates.
+
+Different queries.
+
+Would you run DFS every time?
+
+
+
+```
+Query  ->  DFS  -> Visit subtree  ->  Answer
+```
+
+Time:
+
+```
+O(Size of subtree)
+```
+
+Too slow.
+
+
+
+# We Need a Better Representation
+
+Suppose...
+
+just suppose...
+
+B's subtree could somehow become
+
+```
+[2,1,3]
+```
+
+inside an array.
+
+Then
+
+Subtree Sum
+
+would become
+
+Range Sum.
+
+Suddenly we can use
+
+- Prefix Sum
+- Fenwick Tree
+- Segment Tree
+
+Wait...
+
+That's exactly what we want.
+
+
+
+
+# The Impossible Requirement
+
+We need an array where
+
+```
+Subtree↓Continuous Segment
+```
+
+Not scattered.
+
+Continuous.
+
+Question.
+
+Can DFS accidentally do this?
+
+
+
+
+# Let's Record ONLY Entry
+
+Forget exit time for a moment.
+
+Imagine every time DFS ENTERS a node...
+
+we write it into an array.
+
+
+
+        A
+      /   \
+     B     C
+    / \
+   E   F
+
+
+
+Now record entry.
+
+```
+ABEFC
+```
+
+Array becomes
+
+```
+Index0  1  2  3  4ValueA  B  E  F  C
+```
+
+Pause.
+
+Just stare.
+
+
+
+
+Where are B's subtree nodes?
+
+```
+A[B E F]C
+```
+
+Wait...
+
+They're together.
+
+Interesting.
+
+
+
+# Why Does This Happen?
+
+Think back to Chapter 2.
+
+What was our biggest law?
+
+> **DFS cannot leave a subtree until it completely finishes it.**
+
+Now let's replay the DFS.
+
+```
+Enter B↓Record B↓Enter E↓Record E↓Finish E↓Enter F↓Record F↓Finish F↓Exit B
+```
+
+Question.
+
+Could C get recorded here?
+
+```
+BECF
+```
+
+Impossible.
+
+Why?
+
+Because DFS hasn't exited B.
+
+Exactly!
+
+
+
+
+# The Key Insight
+
+When we record **only ENTRY events**...
+
+DFS writes
+
+```
+Node↓All descendants↓Exit
+```
+
+Since DFS cannot escape the subtree...
+
+every descendant gets recorded immediately after its parent.
+
+Nothing from outside can interrupt.
+
+
+
+
+Notice.
+
+Everything belonging to B got written
+
+before anything outside B.
+
+That means
+
+B's subtree occupies
+
+one continuous block.
+
+
+
+# This Is NOT Because of Arrays
+
+The array is innocent.
+
+The real reason is still
+
+the recursion stack.
+
+
+
+
+This process is called
+
+```
+Tree Flattening
+```
+
+or
+
+```
+Euler Flattening
+```
+
