@@ -118,3 +118,281 @@ Let's record both events for every node.
 | F    | 4     | 5    |
 | C    | 7     | 8    |
 | D    | 9     | 10   |
+|      |       |      |
+|      |       |      |
+
+
+Notice what's happening.
+
+The bigger the subtree...
+
+the longer it stays alive.
+
+
+
+# Here's the Crazy Observation
+
+Look again.
+
+|Node|Lifetime|
+|---|---|
+|A|0 → 11|
+|B|1 → 6|
+|E|2 → 3|
+|F|4 → 5|
+```
+Time →
+
+0                     11
+A ───────────────────────
+
+   1          6
+   B ───────────
+
+      2  3
+      E ──
+
+          4 5
+          F ──
+```
+
+
+
+Do you notice?
+
+They're not random.
+
+They're nested.
+
+Like Russian dolls.
+
+
+
+# Chapter 2 — Why Every Subtree Becomes One Continuous Interval
+
+
+
+
+**Why is B one continuous interval?**
+
+Why not
+
+```
+1 -- 3...7 -- 9
+```
+
+Why doesn't B's subtree get split?
+
+Who guarantees this?
+
+Once DFS enters a node...
+
+it becomes trapped inside that node's subtree.
+
+Imagine B creates a room.
+
+
+
+
+Enter B
+
+┌─────────────────────────┐
+
+Everything inside B
+
+must happen here
+
+└─────────────────────────┘
+
+Exit B
+
+
+
+
+DFS cannot teleport.
+
+The only exit from the room...
+
+is
+
+```
+Exit B
+```
+
+Until then...
+
+everything that happens belongs to B.
+
+
+
+# DFS Has No Choice
+
+This is the important sentence.
+
+> **DFS does not choose to finish a subtree continuously.**
+> 
+> **The tree forces it to.**
+
+Read that again.
+
+Euler Tour is not clever.
+
+It is inevitable.
+
+
+
+
+# This Is the Law
+
+
+
+┌───────────────────────────────┐
+
+A
+
+     ┌───────────────┐
+
+     B
+
+          ┌─────┐
+
+          E
+
+          └─────┘
+
+     └───────────────┘
+
+└───────────────────────────────┘
+
+
+
+Notice.
+
+Bubbles never partially overlap.
+
+They either
+
+contain
+
+or
+
+are disjoint.
+
+Exactly like tree subtrees
+
+
+
+# Why Partial Overlap Is Impossible
+
+
+
+Suppose someone claims
+
+B
+
+┌───────────────┐
+
+        C
+
+     ┌──────────────┐
+
+└───────────────┘
+
+      └──────────────┘
+
+Partial overlap.
+
+Can this happen?
+
+No.
+
+Why?
+
+Because then DFS would have to
+leave B
+enter C
+come back to B
+without exiting B.
+Impossible.The recursion stack doesn't allow it.
+
+
+
+
+
+# his Is Why Euler Tour Exists
+
+The clock is only recording something deeper.
+
+The deeper truth is
+
+```
+Recursion
+
+↓
+
+Creates nested execution
+
+↓
+
+Nested execution
+
+↓
+
+Creates nested intervals
+
+↓
+
+Clock records intervals
+
+
+# The Stack Explains Everything
+
+Remember DFS recursion?
+
+```
+dfs(B){    dfs(E);    dfs(F);}
+```
+
+Question.
+
+Can execution leave
+
+```
+dfs(B)
+```
+
+before
+
+```
+dfs(F)
+```
+
+finishes?
+
+Impossible.
+
+Why?
+
+Because
+
+`dfs(B)` is still on the call stack.
+
+This is HUGE.
+
+The call stack itself enforces the interval.
+
+Not Euler.
+
+Not timestamps.
+
+The recursion stack
+
+
+```
+
+The timer didn't create intervals.
+
+The recursion did.
+
+The timer simply took photographs.
+
