@@ -1434,3 +1434,966 @@ or
 Euler Flattening
 ```
 
+
+
+# he Most Important Observation
+
+Suppose
+
+```
+Entry OrderABEFC
+```
+
+Let's assign indices.
+
+```
+01234
+```
+
+Now
+
+```
+B
+```
+
+starts at
+
+```
+1
+```
+
+How long is B's subtree?
+
+Three nodes.
+
+So
+
+```
+1↓2↓3
+```
+
+Exactly.
+
+Subtree(B)
+
+becomes
+
+```
+[1...3]
+```
+
+One range.
+
+
+
+
+Exactly.
+
+Subtree(B)
+
+becomes
+
+```
+[1...3]
+```
+
+One range.
+
+---
+
+# Wait...
+
+We Already Have tin[]
+
+Remember
+
+```
+tin[node]
+```
+
+What does it represent now?
+
+Not just
+
+> "Entry time."
+
+It also becomes
+
+> **The starting index of this node's subtree inside the flattened array.**
+
+That's huge.
+
+---
+
+# We Need One More Piece
+
+Suppose
+
+```
+tin[B] = 1
+```
+
+Question.
+
+Where does B's subtree end?
+
+We know
+
+it starts at
+
+```
+1
+```
+
+Where is the ending index?
+
+We need one more fact.
+
+How many nodes are inside B's subtree?
+
+Answer.
+
+```
+subtreeSize[B]
+```
+
+If
+
+```
+subtreeSize[B] = 3
+```
+
+Then
+
+```
+Start = 1Length = 3End = 3
+```
+
+Formula:
+
+```
+End = tin[u] + subtreeSize[u] - 1
+```
+
+Boom.
+
+Now every subtree is represented as
+
+```
+[tin[u] ... tin[u] + subtreeSize[u] - 1]
+```
+
+One continuous range.
+
+---
+
+# This Is The Bridge
+
+Watch what just happened.
+
+Originally
+
+```
+Graph Problem↓Sum of subtree
+```
+
+Now
+
+```
+Array Problem↓Range Sum
+```
+
+Original
+
+```
+Update subtree
+```
+
+becomes
+
+```
+Range Update
+```
+
+Original
+
+```
+Maximum in subtree
+```
+
+becomes
+
+```
+Range Maximum
+```
+
+Original
+
+```
+Count colors in subtree
+```
+
+becomes
+
+```
+Range Query
+```
+
+The graph problem has disappeared.
+
+
+
+
+
+Tree
+
+↓
+
+Euler Tour
+
+↓
+
+Flatten
+
+↓
+
+Array
+
+↓
+
+Segment Tree
+
+or
+
+Fenwick Tree
+
+↓
+
+Fast Queries
+
+
+
+Whenever you see
+
+> "Many subtree queries"
+
+your brain should immediately think:
+
+```
+Tree↓Flatten↓Range Queries
+```
+
+
+
+
+
+You might be thinking:
+
+> "Wait... we already had `tin` and `tout`. Now we're using `tin` and `subtreeSize`. Which one is Euler Tour?"
+
+Excellent question.
+
+There isn't just one Euler representation.
+
+There are **different recordings of the same DFS timeline**, each optimized for different tasks.
+
+Think of it like this:
+
+### Version 1 — Time Intervals
+
+Record:
+
+```
+EnterExit
+```
+
+Useful for:
+
+- Ancestor checks
+- Interval containment
+- LCA preprocessing ideas
+
+---
+
+### Version 2 — Flattened Array
+
+Record:
+
+```
+Entry order
+```
+
+Compute:
+
+```
+Subtree size
+```
+
+Useful for:
+
+- Segment Tree
+- Fenwick Tree
+- Subtree updates
+- Subtree sums
+
+Different recordings.
+
+Same DFS.
+
+Same underlying physics.
+
+
+
+
+> **DFS records every node of a subtree consecutively because it cannot leave the subtree until it finishes it. Therefore, recording nodes in DFS entry order automatically flattens every subtree into one contiguous array segment. Trees become ranges.**
+
+
+
+
+# Chapter 6 — Why Segment Trees Love Euler Tour
+
+---
+
+> **This chapter is NOT about Segment Trees.**
+> 
+> It is about answering one question:
+> 
+> **Why do almost all advanced tree algorithms begin with Euler Tour?**
+> 
+> If you understand this chapter, you'll stop thinking
+> 
+> > "Euler Tour + Segment Tree"
+> 
+> as a memorized pair.
+> 
+> Instead you'll see why they are natural partners.
+
+---
+
+
+
+
+
+        A(5)
+      /      \
+   B(2)      C(7)
+   /   \
+E(1)   F(3)
+
+
+
+Suppose someone gives you this tree.
+
+
+
+Every node has a value.
+
+---
+
+Now imagine thousands of queries.
+
+
+Sum of subtree(B)
+
+Update subtree(C)
+
+Maximum inside subtree(A)
+
+Minimum inside subtree(B)
+
+Add +10 to every node inside subtree(B)
+
+...
+
+
+
+Question.
+
+How would you solve this?
+
+---
+
+# The Naive World
+
+Take
+
+```
+Subtree(B)
+```
+
+Run DFS.
+
+
+
+Compute answer.
+
+Next query?
+
+Run DFS again.
+
+Again.
+
+Again.
+
+Again.
+
+If there are
+
+```
+100000 queries
+```
+
+This becomes
+
+```
+100000 DFS traversals
+```
+
+Terrible.
+
+
+
+
+
+# Think Like a Data Structure
+
+Suppose I tell a Segment Tree:
+
+> Give me the sum of indices
+
+```
+1...3
+```
+
+Can it do that?
+
+Absolutely.
+
+That's exactly what Segment Trees were built for.
+
+Wait...
+
+Who converted
+
+```
+Subtree(B)
+```
+
+into
+
+```
+Range(1...3)
+```
+
+Euler Tour did.
+
+---
+
+# This Is The Real Partnership
+
+Notice something.
+
+Segment Tree does NOT understand trees.
+
+It understands
+
+```
+Arrays.
+```
+
+Euler Tour does NOT answer queries.
+
+It converts
+
+```
+Trees↓Arrays
+```
+
+Together...
+
+they solve tree problems.
+
+---
+
+# Think of Them Like a Translator
+
+Imagine two people.
+
+One speaks
+
+```
+Tree Language
+```
+
+The other speaks
+
+```
+Array Language
+```
+
+They cannot communicate.
+
+Euler Tour becomes the translator.
+
+
+
+Tree
+
+↓
+
+Euler
+
+↓
+
+Array
+
+↓
+
+Segment Tree
+
+
+
+
+
+# Updates Work Too
+
+Suppose
+
+```
+Add +10to every node inside subtree(B)
+```
+
+Old world.
+
+```
+DFS↓VisitBEF↓Update
+```
+
+New world.
+
+Euler says
+
+```
+Subtree(B)↓Range(1...3)
+```
+
+Segment Tree says
+
+```
+Lazy Propagation↓Done.
+```
+
+
+
+# Observe Something Beautiful
+
+Originally
+
+```
+Tree Algorithm
+```
+
+needed
+
+```
+DFSEvery Query
+```
+
+Now
+
+```
+One DFS↓Millions of Range Queries
+```
+
+Huge difference.
+
+
+
+
+
+
+# The Universal Formula
+
+Whenever you hear
+
+> Multiple subtree queries
+
+your brain should immediately execute this pipeline.
+
+
+
+Tree
+
+↓
+
+Euler Tour
+
+↓
+
+Flatten
+
+↓
+
+Array
+
+↓
+
+Range Data Structure
+
+↓
+
+Answer
+
+
+
+
+# Why Fenwick Tree Also Works
+
+Fenwick Tree understands
+
+```
+PrefixRanges
+```
+
+Nothing else.
+
+Euler gives
+
+```
+Tree↓Range
+```
+
+Done.
+
+Perfect match.
+
+
+
+
+
+# Why Prefix Sum Works
+
+Suppose queries are
+
+```
+Only subtree sum.No updates.
+```
+
+Do we even need Segment Tree?
+
+No.
+
+Flatten.
+
+Compute Prefix Sum.
+
+Answer every subtree in
+
+```
+O(1)
+```
+
+Again.
+
+Euler translated.
+
+Prefix Sum solved.
+
+---
+
+# The Bigger Pattern
+
+Notice something.
+
+Euler itself solves nothing.
+
+Segment Tree itself cannot solve tree problems.
+
+Together
+
+they become powerful.
+
+Exactly like
+
+---
+
+
+
+
+
+## Euler
+
+Needs
+
+```
+Range Data Structure
+```
+
+Every major graph algorithm partners with another data structure.
+
+Euler's partner happens to be
+
+
+
+
+Arrays
+↓
+
+Segment Tree
+
+Fenwick Tree
+
+Sparse Table
+
+Mo's Algorithm on Trees
+
+...
+
+
+
+---
+
+# Why Euler Tour Is So Important
+
+Without Euler
+
+```
+Tree Problem
+```
+
+stays
+
+```
+Tree Problem.
+```
+
+With Euler
+
+```
+Tree Problem↓Array Problem.
+```
+
+Array algorithms are among the most optimized tools in computer science.
+
+Euler gives you access to that entire toolbox.
+
+
+
+
+Chapter 7 — The Universal Euler Template
+
+
+
+
+# Before Writing a Single Line
+
+Let's recall everything we've proved.
+
+DFS creates only two events.
+
+```
+ENTEREXIT
+```
+
+Every node owns a lifetime.
+
+```
+Enter ---------------- Exit
+```
+
+
+
+
+"The moment I step into u, record the event number."
+
+
+```
+int timer = 0;
+
+vector<int> tin;
+vector<int> tout;
+vector<vector<int>> adj;
+
+void dfs(int u, int parent)
+{
+    tin[u] = timer++;
+
+    for(int v : adj[u])
+    {
+        if(v == parent)
+            continue;
+
+        dfs(v, u);
+    }
+
+    tout[u] = timer++;
+}
+
+```
+
+
+
+
+
+
+# The First Universal Function
+
+Now ancestor queries become trivial.
+
+```
+bool isAncestor(int u, int v)
+{
+    return tin[u] <= tin[v]
+        && tout[v] <= tout[u];
+}
+```
+
+Notice.
+
+This function contains
+
+ZERO graph logic.
+
+No DFS.
+
+No recursion.
+
+No edges.
+
+Only geometry.
+
+
+
+
+
+# Two Major Euler Templates
+
+Not one.
+
+---
+
+# Template A — Timeline Euler
+
+Records
+
+```
+ENTEREXIT
+```
+
+Code
+
+```
+tin[u]tout[u]
+```
+
+Purpose
+
+```
+AncestorIntervalsLCA ideasLow-LinkSCC thinking
+```
+
+Think
+
+```
+Timeline
+```
+
+---
+
+# Template B — Flattening Euler
+
+Records only
+
+```
+ENTER
+```
+
+and builds an array.
+
+Example.
+
+```
+vector<int> euler;
+
+void dfs(int u, int parent)
+{
+    tin[u] = euler.size();
+
+    euler.push_back(u);
+
+    for(int v : adj[u])
+    {
+        if(v == parent)
+            continue;
+
+        dfs(v,u);
+    }
+}
+```
+
+
+
+Now
+
+```
+Euler ArrayA B E F C
+```
+
+exists.
+
+Notice.
+
+No
+
+```
+tout[]
+```
+
+at all.
+
+Because we don't need exit events
+
+
+
+
+# Why Two Templates?
+
+This confused me when I first learned Euler Tour, and it confuses almost everyone.
+
+The answer is beautifully simple.
+
+They solve different problems.
+
+---
+
+## If your question is
+
+```
+Who contains whom?
+```
+
+You need
+
+```
+ENTEREXIT
+```
+
+because containment requires both boundaries.
+
+---
+
+## If your question is
+
+```
+Turn tree into array.
+```
+
+You only need
+
+```
+Entry Order.
+```
+
+Exit isn't useful.
+
+
