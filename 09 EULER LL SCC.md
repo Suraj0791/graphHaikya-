@@ -995,6 +995,464 @@ Is
 B — C
 ```
 
+A
 
+↓
+
+B
+
+
+C
+
+↓
+
+D
 ```
 
+
+
+
+
+Graph splits.
+
+That edge is special.
+
+We call it
+
+```
+Bridge.
+```
+
+Easy.
+
+
+
+# Now Change One Thing
+
+Add one edge.
+```
+        A
+        |
+        B
+        |
+        C
+       / \
+      D---E
+```
+
+
+
+
+Question.
+
+Is
+
+```
+C — D
+```
+
+still critical?
+
+No.
+
+Why?
+
+Because
+
+```
+D↓E↓C
+```
+
+still connects.
+
+Interesting.
+
+# Chapter 4 — Bridges
+
+## The Core Question
+
+Given a DFS tree edge `u → v`, is it a bridge?
+
+Physically: **if you cut `u — v`, does the graph split?**
+
+Two worlds exist:
+
+- **Child's subtree has a back edge to some ancestor of u** → subtree can escape → not a bridge
+- **No such back edge exists** → subtree is trapped → bridge
+
+So the entire problem reduces to one question:
+
+> **Can v's subtree escape back to u or any ancestor of u?**
+
+---
+
+## low[v] — The Tool We Already Have
+
+`low[v]` = earliest discovery time reachable from v's entire subtree (via back edges).
+
+This already answers the escape question perfectly.
+
+---
+
+## Dry Run
+
+**Graph:** A → B → C → D (straight chain)
+
+Discovery times: A=1, B=2, C=3, D=4
+
+**Case 1: No back edge from D**
+
+- `low[D] = 4` (can't reach anything older)
+- `disc[C] = 3`
+- `low[D] > disc[C]` → D's subtree is trapped → **C—D is a bridge**
+
+**Case 2: Add back edge D → B**
+
+- `low[D] = 2` (D can reach B through back edge)
+- `disc[C] = 3`
+- `low[D] < disc[C]` → D escapes past C → **C—D is NOT a bridge**
+
+
+
+# Pause
+
+Notice what we just compared.
+
+Not
+
+```
+disc[D]
+```
+
+Not
+
+```
+low[C]
+```
+
+We compared
+
+```
+low[child]vsdisc[parent]
+```
+
+Why exactly those two?
+---
+
+## Deriving the Condition
+
+**`disc[parent]`** = the moment parent entered history. Everything before it is an ancestor, everything after is below.
+
+**`low[child]`** = oldest discovery time reachable from child's subtree.
+
+Compare them:
+
+|`low[child]`|meaning|bridge?|
+|---|---|---|
+|`2` (< `disc[parent]=5`)|child escapes to older ancestor|No|
+|`5` (= `disc[parent]=5`)|child reaches exactly the parent via back edge|No|
+|`8` (> `disc[parent]=5`)|child can't even reach parent|**Yes**|
+
+So the condition is:
+
+```
+if (low[child] > disc[parent])  →  Bridge
+```
+
+### Why strictly `>` and not `>=`?
+
+If `low[child] == disc[parent]`, the child reaches the parent **through a back edge**. So even if the tree edge is cut, the back edge keeps them connected. Hence `>=` would be wrong — only strictly greater means no escape at all.
+
+---
+
+## The Analogy
+
+Think of it as caves with tunnels. `u → v` is the main rope down.
+
+- If the lower cave has a **side tunnel back to an older cave** → cut the rope, no problem
+- If **no tunnel exists** → cut the rope, everything below is isolated → bridge
+
+`low[child]` measures how far the tunnel reaches. If it can't even reach the parent, the rope is the only lifeline.
+
+---
+
+## The Formula in English
+
+```cpp
+if (low[child] > disc[parent]) {
+    // Bridge
+}
+```
+
+_"My child's subtree cannot reach me or anyone older than me — I am its only doorway. Cut me, the worlds separate."_
+
+---
+
+## Key Insight
+
+`low[]` was invented just to answer _"how far back can this subtree reach?"_
+
+Bridges emerged from that naturally — we never designed `low[]` for bridges specifically. Same pattern as topological sort emerging from exit order.
+
+---
+
+## Bridge → Articulation Points (preview)
+
+Instead of removing an edge, ask: **when does removing a vertex split the graph?**
+
+Same escape philosophy, one level higher. Articulation points = bridges generalized from edges to vertices.
+
+
+
+
+# Before We Begin
+
+Forget articulation points.
+
+Forget formulas.
+
+Ask only one question.
+
+> **When does a node become the only doorway between two worlds?**
+
+Notice.
+
+This is almost the same question as Bridges.
+
+Except...
+
+last chapter we removed
+
+```
+Edge
+```
+
+Today we remove
+
+```
+Vertex
+```
+
+That's the only difference.
+
+
+
+
+# The New Question
+
+Suppose
+
+```
+u↓v
+```
+
+Question.
+
+If
+
+```
+u
+```
+
+disappears...
+
+can
+
+```
+v
+```
+
+still reach
+
+u's ancestors?
+
+---
+
+If yes
+
+↓
+
+u wasn't important.
+
+---
+
+If no
+
+↓
+
+u was the only doorway.
+
+Articulation Point.
+
+---
+
+# Wait...
+
+Didn't We Already Invent Something That Measures Escape?
+
+Exactly.
+
+```
+low[v]
+```
+
+Again.
+
+
+
+
+
+# Compare
+
+Suppose
+
+```
+disc[u]=5
+```
+
+Child returns
+
+```
+low[v]=2
+```
+
+Question.
+
+Can child escape above u?
+
+Yes.
+
+It reaches
+
+So
+
+u isn't necessary.
+
+---
+
+Now
+
+```
+disc[u]=5low[v]=7
+```
+
+Child reaches nobody older.
+
+Remove u.
+
+Child trapped.
+
+Articulation.
+
+---
+
+Interesting...
+
+Looks almost identical to Bridges.
+
+
+
+
+# But Something Feels Wrong
+
+Wait.
+
+Suppose
+
+```
+disc[u]=5low[v]=5
+```
+
+What happens?
+
+Child reaches
+
+exactly
+
+u.
+
+Question.
+
+If we remove
+
+u...
+
+does reaching
+
+u
+
+help?
+
+No.
+
+Because
+
+u is gone.
+
+Read that again.
+
+This is the key difference.
+
+---
+
+# Compare Carefully
+
+## Bridge
+
+Edge removed.
+
+Parent still exists.
+
+If child reaches parent...
+
+safe.
+
+Therefore
+
+```
+low[child]<=disc[parent]
+```
+
+is okay.
+
+Bridge only when
+
+```
+>
+```
+
+---
+
+## Articulation
+
+Node removed.
+
+Parent disappears.
+
+Reaching parent is useless.
+
+Child must reach
+
+someone older.
+
+Therefore
+
+the dangerous case becomes
+
+```
+low[child]>=disc[parent]
+```
+
+Notice the equality.
+
+This is where
+
+```
+>=
+```
+
+comes from.
+
+Not memorization.
+
+Logic.
