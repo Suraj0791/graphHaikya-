@@ -609,3 +609,392 @@ for (int v : adj[u]) {
 }
 ```
 
+
+
+
+
+# Everything We Know
+
+A node wants to answer one question.
+
+> **"What is the earliest discovery time my subtree can reach?"**
+
+Let's stand at node
+
+```
+u
+```
+
+Question.
+
+Where can information come from?
+
+Don't think about code.
+
+Think physically.
+
+
+
+
+
+Every node builds
+
+```
+low[u]
+```
+
+using exactly
+
+three sources.
+
+Nothing more.
+
+Nothing less.
+
+
+
+# Source 1
+
+## Myself
+
+Initially
+
+what is the oldest node I know?
+
+Myself.
+
+Therefore
+
+```
+low[u] = disc[u];
+```
+
+Read in English.
+
+> "Until proven otherwise, I believe I can only reach myself."
+
+Not a formula.
+
+A belief.
+
+---
+
+# Source 2
+
+## My Child Found Something Older
+
+Suppose
+
+```
+u↓v
+```
+
+Child explored an entire universe.
+
+Returned.
+
+Said
+
+> "I found discovery time 2."
+
+Should parent update?
+
+Absolutely.
+
+Question.
+
+Which one should parent keep?
+
+```
+disc[u]orlow[v]
+```
+
+Answer.
+
+The older one.
+
+Older means
+
+smaller.
+
+Therefore
+
+```
+low[u] = min(low[u], low[v]);
+```
+
+Again...
+
+Read English.
+
+> "Maybe my child knows someone older than I do."
+
+---
+
+# Source 3
+
+## I Found A Direct Back Edge
+
+Suppose
+
+```
+Ancestor↑u
+```
+
+Discovery
+
+```
+Ancestor = 2
+u = 7
+```
+
+Question.
+
+Can u now reach
+
+2?
+
+Yes.
+
+Then
+
+```
+low[u] = min(low[u], disc[ancestor]);
+```
+
+Notice.
+
+Not
+
+```
+low[ancestor]
+```
+
+Why?
+
+Excellent question.
+
+We'll answer that in a minute.
+
+# Chapter 3 — The Three Sources of Truth
+
+## The Question Every Node Asks
+
+> "What is the earliest discovery time my subtree can reach?"
+
+Standing at node `u` — where can this information come from? Think physically, not algorithmically.
+
+---
+
+## The Three Sources
+
+### Source 1: Myself
+
+Even with no children, I know my own discovery time.
+
+```
+low[u] = disc[u]
+```
+
+_"Until proven otherwise, I can only reach myself."_ — a belief, not a formula.
+
+---
+
+### Source 2: My Child Explored Something Older
+
+Child `v` explored an entire subtree and returned with a summary.
+
+```
+low[u] = min(low[u], low[v])
+```
+
+_"Maybe my child found someone older than I know about."_
+
+Why `low[v]` and not `disc[v]`? Because the child summarizes its **entire explored world**, not just itself. Using only `disc[v]` throws away everything the child discovered.
+
+---
+
+### Source 3: I Directly See a Back Edge
+
+Suppose `u` has a direct back edge to an ancestor.
+
+```
+low[u] = min(low[u], disc[ancestor])
+```
+
+**Why `disc[ancestor]` and not `low[ancestor]`?**
+
+The back edge physically lands on that ancestor — not on everything reachable _from_ that ancestor. The rope connects to time=2, not to everything reachable from time=2. Using `low[ancestor]` would claim you can reach places the back edge doesn't actually connect to.
+
+---
+
+## Is There a Fourth Source?
+
+No. Standing at `u`, information can only come from:
+
+- Yourself
+- Your children's completed subtrees
+- Your own direct back edges
+
+Parents haven't finished exploring yet — their `low[]` is incomplete. That's why `low[parent]` is never used as a source.
+
+---
+
+## Why min()?
+
+Every source gives a discovery time. The goal is the **oldest reachable ancestor** = the **smallest** discovery time. Hence `min()` everywhere — not because algorithms love minimums, but because history flows toward the earliest ancestor.
+
+---
+
+## The Crucial Distinction
+
+|Source|What it says|Why|
+|---|---|---|
+|`low[child]`|Summary of child's entire explored world|Child finished; summary is complete|
+|`disc[ancestor]`|Exactly where the back edge lands|Edge reaches that node, not its subtree|
+|`disc[child]`|❌ Never used|Throws away child's subtree info|
+|`low[ancestor]`|❌ Never used|Back edge doesn't reach ancestor's subtree|
+
+---
+
+## The Full Update Logic
+
+```cpp
+low[u] = disc[u];                          // Source 1: myself
+
+// for each neighbor v:
+if (v is unvisited tree child):
+    dfs(v)
+    low[u] = min(low[u], low[v]);          // Source 2: child's summary
+
+if (v is already visited ancestor):
+    low[u] = min(low[u], disc[v]);         // Source 3: direct back edge
+```
+
+That's the entire algorithm. No magic.
+
+---
+
+## Information Flow
+
+```
+Discovery times flow DOWNWARD (assigned going in)
+Low values flow UPWARD (returned coming out)
+Back edges inject information SIDEWAYS
+```
+
+Discovery and reachability move in opposite directions. Back edges are what connect the two directions — they let deep nodes report that they can reach high ancestors.
+
+---
+
+## The Three Conversations
+
+- **Myself:** "I know about myself." → `disc[u]`
+- **Child:** "I explored my whole subtree. Oldest thing I found: time 2." → `low[child]`
+- **Back Edge:** "I directly touch ancestor at time 3." → `disc[ancestor]`
+
+Three independent witnesses. Take the oldest. Done.
+
+---
+
+## Mental Model
+
+> Every node builds `low[u]` from exactly three sources: its own discovery time, summaries returned by children, and direct back edges it sees itself. There is no fourth source because DFS provides no other channel through which information can enter the subtree.
+
+```
+                 u
+
+          /      |      \
+
+         /       |       \
+
+    Myself    Child    Back Edge
+
+   disc[u]   low[v]   disc[x]
+
+         \      |      /
+
+          \     |     /
+
+              minimum
+
+                 │
+
+                 ▼
+
+              low[u]
+```
+
+
+
+
+
+Imagine an edge
+
+```
+u —— v
+```
+
+Child
+
+```
+v
+```
+
+returns
+
+```
+low[v]
+```
+
+What single comparison tells us
+
+> **"This edge is the ONLY connection between these two worlds."**
+
+That one comparison creates the entire concept of **Bridges**.
+
+And once you understand Bridges, **Articulation Points** become almost inevitable.
+
+
+
+# The Question
+
+Suppose you have this graph.
+
+```
+        A
+        |
+        B
+        |
+        C
+        |
+        D
+```
+
+
+Question.
+
+Is
+
+```
+B — C
+```
+
+important?
+
+Obviously.
+
+If you remove it...
+
+```
+Question.
+
+Is
+
+```
+B — C
+```
+
+
+```
+
