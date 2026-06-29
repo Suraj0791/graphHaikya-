@@ -1607,3 +1607,460 @@ Parent is the only doorway.
 ---
 
 
+
+
+# Discover Node
+
+The moment DFS reaches
+
+```
+u
+```
+
+we now know
+
+two things.
+
+Initially
+
+the oldest node reachable
+
+is
+
+myself.
+
+So
+
+```
+disc[u] = low[u] = timer++;
+```
+
+Read this in English.
+
+> "I just entered history.
+> 
+> Right now, I believe I can only reach myself."
+
+This is probably the most beautiful line in the algorithm.
+
+
+
+
+
+# Step 4 — Visit Neighbors
+
+Normal DFS.
+
+```
+for(auto v : adj[u])
+```
+
+Nothing special yet.
+
+---
+
+# Step 5 — Ignore Parent
+
+Suppose
+
+```
+u↓v
+```
+
+Question.
+
+When DFS reaches
+
+v
+
+it immediately sees
+
+u
+
+again.
+
+Should it think
+
+```
+"Oh!Back Edge!"
+```
+
+No.
+
+That's just the edge we came from.
+
+So
+
+```
+if(v == parent)    continue;
+```
+
+Read mentally.
+
+> Ignore the road I just walked
+
+
+
+
+
+## World 1
+
+Already visited.
+
+Question.
+
+What kind of edge is this?
+
+In undirected graphs...
+
+the only useful already-visited neighbor (other than the parent) is an ancestor reached by a back edge.
+
+So
+
+```
+if(disc[v] != -1)
+```
+
+means
+
+> I found a back edge.
+
+Question.
+
+What should update?
+
+Chapter 3 already answered.
+
+```
+low[u] = min(low[u], disc[v]);
+```
+
+Notice.
+
+Not
+
+```
+low[v]
+```
+
+Because the edge physically reaches
+
+v.
+
+Not
+
+everything
+
+reachable from
+
+v.
+
+---
+
+## World 2
+
+Not visited.
+
+Normal DFS.
+
+```
+dfs(v, u);
+```
+
+Question.
+
+When child returns...
+
+what should happen?
+
+Child explored
+
+an entire world.
+
+Therefore
+
+```
+low[u] = min(low[u], low[v]);
+```
+
+Exactly the upward information flow from Chapter 2.
+
+---
+
+# Stop.
+
+Notice something.
+
+Those two lines are the ENTIRE algorithm.
+
+```
+Back Edge↓disc[v]
+```
+
+```
+Child↓low[v]
+```
+
+That's it.
+
+Everything else is bookkeeping.
+
+
+```
+int timer = 0;
+
+vector<int> disc(n, -1);
+vector<int> low(n);
+
+void dfs(int u, int parent)
+{
+    disc[u] = low[u] = timer++;
+
+    for(int v : adj[u])
+    {
+        if(v == parent)
+            continue;
+
+        if(disc[v] != -1)
+        {
+            // Back Edge
+
+            low[u] = min(low[u], disc[v]);
+        }
+        else
+        {
+            dfs(v, u);
+
+            low[u] = min(low[u], low[v]);
+
+            if(low[v] > disc[u])
+            {
+                // Bridge
+            }
+
+            if(low[v] >= disc[u])
+            {
+                // Articulation (non-root)
+            }
+        }
+    }
+}
+```
+
+
+
+
+# Wait...
+
+Where's The Root Rule?
+
+Excellent.
+
+We haven't handled it yet.
+
+Need
+
+```
+int children = 0;
+```
+
+Whenever
+
+```
+dfs(child)
+```
+
+happens
+
+increment.
+
+```
+children++;
+```
+
+After loop.
+
+```
+if(parent == -1 && children >= 2)
+```
+
+Root articulation.
+
+Exactly as Chapter 5 proved.
+
+---
+
+# Why Doesn't Bridge Need Root Rule?
+
+Interesting observation.
+
+Because bridges are about
+
+edges.
+
+Not nodes.
+
+Root isn't special.
+
+Only articulation depends on removing
+
+vertices.
+
+---
+
+# One More Important Detail
+
+Suppose graph isn't connected.
+
+```
+Component 1Component 2Component 3
+```
+
+Question.
+
+Can one DFS reach everything?
+
+No.
+
+Need
+
+```
+for(int i=0;i<n;i++){    if(disc[i]==-1)        dfs(i,-1);}
+```
+
+Exactly like
+
+Connected Components.
+
+Nothing new.
+
+```
+             Visit Node
+
+                 │
+
+                 ▼
+
+      disc = low = timer++
+
+                 │
+
+                 ▼
+
+        Explore Every Neighbor
+
+         │                 │
+
+         ▼                 ▼
+
+   Already Visited     New Child
+
+         │                 │
+
+         ▼                 ▼
+
+ Update with disc     DFS(child)
+
+                           │
+
+                           ▼
+
+                  Update with low
+
+                           │
+
+                           ▼
+
+              Bridge / Articulation
+              
+              
+              
+```
+
+
+
+Low-Link taught us:
+
+> **Can a subtree escape to an older ancestor?**
+
+
+
+
+
+### The Reality of `disc[v] != -1` (The "Already Visited" World)
+
+When you are at $u$ and you see a neighbor $v$ that is **already visited**:
+
+1. **Is $v$ my parent?** (e.g., you just came from $A$ to $B$, and now you see $A$ again).
+    
+    - **Action:** Ignore it. If you process it, you'll think you found a shortcut, but you're just looking at the path you just walked. This is why `if(v == parent) continue;` exists.
+        
+2. **Is $v$ NOT my parent?** (This is the **"Back Edge"**).
+    
+    - **The Physics:** You are at $u$, you look at $v$, and you realize $v$ was visited _a long time ago_. Since $v$ is not your parent, it means there is a "secret tunnel" (a cycle) that connects your current branch back to the history of the graph.
+        
+    - **The Math:** Because $v$ is an ancestor, its `disc[v]` is a very small number (an older time). By doing `low[u] = min(low[u], disc[v])`, you are telling the computer: _"I just found a shortcut to time `disc[v]`."_
+        
+
+### The Reality of `disc[v] == -1` (The "New World")
+
+When you are at $u$ and you see a neighbor $v$ that has never been visited:
+
+1. **The Physics:** This is a **"Tree Edge."** You are discovering a new, unexplored part of the cave.
+    
+2. **The Action:** You _must_ go deep into $v$ (`dfs(v, u)`) because you have no idea what secrets are down there.
+    
+3. **The Return:** When the DFS for $v$ finishes and returns to you, you **must** check what $v$ found.
+    
+    - **The Math:** `low[u] = min(low[u], low[v])`. This is the "upward information flow." If $v$ found a shortcut to time 1, you now know that shortcut too. You "inherit" your child's discovery.
+        
+
+### Why this explains the "Two Worlds"
+
+- **If $v$ is already visited (and not parent):** You found a cycle. You don't need to go deep (because you already know $v$ is visited). You just update your `low` value using `disc[v]`.
+    
+- **If $v$ is not visited:** You found a new path. You _must_ go deep, and when you come back, you update your `low` value using `low[v]`.
+    
+
+### The "Mental Cheat Sheet" for your code:
+
+- **`disc[v] != -1`** means: "I see a node I already know. Is it a shortcut?"
+    
+- **`low[u] = min(low[u], disc[v])`** means: "Yes, it's a shortcut to a point in the past."
+    
+- **`low[u] = min(low[u], low[v])`** means: "My child came back and told me they found a shortcut to the past. I'll take it."
+    
+
+**Does it help to see it as "I either see a node I know (and check for a shortcut) or I see a node I don't know (and go explore it)?"**
+
+
+
+
+
+- Topological Sort started with "Why exit order?"
+- Euler started with "Why time?"
+- Low-Link started with "Why isn't discovery time enough?"
+
+That consistency is what makes the Graph Universe coherent.
+
+---
+
+# 🚀 The Natural Birth of the Next Bible
+
+Now ask yourself one final question.
+
+Low-Link taught us:
+
+> **Can a subtree escape to an older ancestor?**
+
+But what if the graph is **directed**?
+
+Suddenly, "escape" isn't symmetric anymore.
+
+A path from `A → B` does **not** imply `B → A`.
+
+That changes everything.
+
+The next mystery becomes:
+
+> **How do we find groups of vertices where everyone can reach everyone else?**
