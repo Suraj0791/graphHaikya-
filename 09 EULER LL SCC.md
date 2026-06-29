@@ -1456,3 +1456,154 @@ comes from.
 Not memorization.
 
 Logic.
+
+
+
+# The Universal Rule
+
+For every child
+
+```
+v
+```
+
+of
+
+```
+u
+```
+
+If
+
+```
+low[v] >= disc[u]
+```
+
+then
+
+that child's world
+
+depends entirely on
+
+u.
+
+Therefore
+
+u
+
+is an articulation point.
+
+
+
+
+
+Therefore
+
+Root Rule becomes
+
+```
+Root is articulationiffit has2 or more DFS children.
+```
+
+Not graph children.
+
+Very important.
+
+DFS tree children.
+
+
+
+
+
+# The Two Rules
+
+Now the entire algorithm becomes
+
+beautifully simple.
+
+---
+
+## Rule 1
+
+Non-root
+
+```
+if(low[child] >= disc[u])
+```
+
+u is articulation.
+
+---
+
+## Rule 2
+
+Root
+
+```
+children >= 2
+```
+
+Root is articulation.
+
+---
+
+That's literally it.
+
+
+
+# Compare Bridges vs Articulation
+
+This is probably the most important comparison.
+
+|Bridge|Articulation|
+|---|---|
+|Remove Edge|Remove Vertex|
+|Parent still exists|Parent disappears|
+|Child may reach parent|Reaching parent is useless|
+|`low > disc`|`low >= disc`|
+
+Notice.
+
+Only one symbol changed.
+
+Because the physical world changed.
+
+
+
+
+> **An articulation point is a vertex that serves as the only doorway from a child's subtree to the rest of the graph. Unlike bridges, removing the vertex destroys the doorway itself, so reaching the parent is no longer enough. That's why the condition becomes `low[child] >= disc[parent]`.**
+
+
+
+
+### Three sources taught us
+
+Every node learns from
+
+- Itself
+- Children
+- Back edges
+
+---
+
+### Bridges taught us
+
+```
+low[child] > disc[parent]
+```
+
+No escape.
+
+---
+
+### Articulation taught us
+
+```
+low[child] >= disc[parent]
+```
+
+Parent is the only doorway.
+
+---
+
+
