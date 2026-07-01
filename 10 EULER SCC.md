@@ -1139,3 +1139,100 @@ Process Largest Finish First
 ↓
 
 Each DFS = One SCC
+
+
+
+
+That's literally
+
+Kosaraju.
+
+We derived it.
+
+
+
+Finish order tells us which world to process first. Reversing the graph removes that world's escape routes, turning it into a sink. A DFS started from the largest finish time on the reversed graph is therefore forced to stay inside exactly one Strongly Connected Component.
+
+
+
+# The Algorithm Has Only Three Jobs
+
+Notice something beautiful.
+
+Kosaraju has exactly
+
+three phases.
+
+---
+
+## Phase 1
+
+Question
+
+```
+Which world should I process first?
+```
+
+Answer
+
+Run DFS.
+
+Record finish order.
+
+---
+
+## Phase 2
+
+Question
+
+```
+How do I stop DFSfrom escaping?
+```
+
+Answer
+
+Reverse every edge.
+
+---
+
+## Phase 3
+
+Question
+
+```
+How do I extract one world?
+```
+
+Answer
+
+Run DFS
+
+in finish order.
+
+Done.
+
+That's literally the algorithm.
+
+
+
+
+# Phase 1 — Record Finish Order
+
+Question.
+
+What information do we need?
+
+Not discovery.
+
+Not low.
+
+Not tin.
+
+Only
+
+```
+Finish Order.
+```
+
+Exactly like Topological Sort
+
