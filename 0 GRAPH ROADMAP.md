@@ -539,31 +539,31 @@ Dependency DP
 
 ---
 
-# Part 7 — Graph Modeling Bible
-
-This is what separates average candidates from strong problem solvers.
-
-Most "hard graph problems" are actually **wrong graph models**.
-
-Learn how to model:
-
-```
-Grid
-      ↓
-State Space
-      ↓
-Bitmask Graph
-      ↓
-Implicit Graph
-      ↓
-Complement Graph
-      ↓
-Line Graph
-      ↓
-Tree as Graph
-```
-
-Modeling is often harder than coding.
+	# Part 7 — Graph Modeling Bible
+	
+	This is what separates average candidates from strong problem solvers.
+	
+	Most "hard graph problems" are actually **wrong graph models**.
+	
+	Learn how to model:
+	
+	```
+	Grid
+	      ↓
+	State Space
+	      ↓
+	Bitmask Graph
+	      ↓
+	Implicit Graph
+	      ↓
+	Complement Graph
+	      ↓
+	Line Graph
+	      ↓
+	Tree as Graph
+	```
+	
+	Modeling is often harder than coding.
 
 ---
 
