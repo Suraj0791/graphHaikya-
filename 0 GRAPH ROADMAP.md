@@ -457,7 +457,7 @@ Minimum Spanning Tree.
 
 ---
 
-## DSU Bible
+	## DSU Bible
 
 Understand:
 
