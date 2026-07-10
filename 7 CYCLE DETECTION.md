@@ -1905,3 +1905,197 @@ execution order.
 
 Execution is the reverse of completion.
 
+
+
+The idea is this:
+
+> **A node can only declare itself complete after everything depending on it has completed.**
+
+
+
+# Suppose I Give You A Rule
+
+Every employee says
+
+> **"I will report completion only after every person under me reports completion."**
+
+Question.
+
+Who reports first?
+
+The lowest employee.
+
+Exactly.
+
+
+
+Hierarchy.
+
+```
+CEO↓Manager↓Lead↓Intern
+```
+
+Who finishes first?
+
+```
+Intern↓Lead↓Manager↓CEO
+```
+
+Interesting.
+
+Nobody memorized this.
+
+It is forced.
+
+
+
+
+
+# Let's Translate To DFS
+
+Graph.
+
+```
+A → B → C
+```
+
+Meaning.
+
+```
+Amust happenbeforeBmust happenbeforeC
+```
+
+Now DFS starts.
+
+```
+dfs(A)
+```
+
+Question.
+
+Can A finish immediately?
+
+No.
+
+Why?
+
+Because A hasn't even checked B.
+
+---
+
+Question.
+
+Can B finish?
+
+No.
+
+Still waiting for C.
+
+---
+
+Question.
+
+Can C finish?
+
+Yes.
+
+Nobody depends below C.
+
+---
+
+Therefore
+
+completion order becomes
+
+```
+Exit C↓Exit B↓Exit A
+```
+
+Nobody designed this.
+
+DFS forced it.
+
+---
+
+# The Golden Rule
+
+A node cannot EXIT
+
+until every outgoing edge
+
+has already been explored.
+
+Read that again.
+
+This is the entire algorithm.
+
+
+
+What Is A Topological Order?
+
+Question.
+
+Do we want
+
+completion order?
+
+No.
+
+We want
+
+execution order.
+
+Execution must happen
+
+before completion.
+
+So reverse it.
+
+```
+A↓B↓C
+```
+
+BOOM.
+
+
+
+
+
+# The Deep Insight
+
+Topological Sort is NOT
+
+> Reverse DFS.
+
+No.
+
+It's
+
+> Reverse Completion.
+
+Much deeper.
+
+DFS is simply the machine that computes completion
+
+
+
+Topological Sort
+
+is usually
+
+**NOT unique.**
+
+Why?
+
+Because independent tasks
+
+can swap places.
+
+
+
+
+```
+A → B
+```
+
+
