@@ -612,3 +612,130 @@ ADVANCED DFS WORLD
 GRAPH OPERATING SYSTEM
 ```
 
+
+
+```
+WHITE
+
+↓
+
+ENTER
+
+↓
+
+GRAY
+
+↓
+
+ENTRY PLUGIN
+
+↓
+
+CHILD LOOP
+
+↓
+
+EXIT PLUGIN
+
+↓
+
+BLACK
+
+↓
+
+RETURN
+```
+
+
+
+```
+Need DFS?
+
+↓
+
+What changes?
+
+────────────────────────
+
+Need only exploration?
+
+↓
+
+Traversal Plugin
+
+────────────────────────
+
+Need information from parent?
+
+↓
+
+Entry Plugin
+
+↓
+
+Top Down
+
+────────────────────────
+
+Need information from children?
+
+↓
+
+Exit Plugin
+
+↓
+
+Bottom Up
+
+────────────────────────
+
+Need temporary decisions?
+
+↓
+
+Entry = Apply
+
+Exit = Undo
+
+↓
+
+Backtracking
+
+────────────────────────
+
+Need cycle detection?
+
+↓
+
+Gray-State Plugin
+
+────────────────────────
+
+Need ordering after completion?
+
+↓
+
+Exit-Time Plugin
+
+↓
+
+Topological Sort
+
+────────────────────────
+
+Need subtree intervals?
+
+↓
+
+Euler Tour Plugin
+
+────────────────────────
+
+Need bridge / articulation?
+
+↓
+
+Low-Link Plugin
+```
+
+

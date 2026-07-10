@@ -1,4 +1,89 @@
 
+```
+GRAPH / TREE
+
+↓
+
+Need shortest path?
+
+YES
+
+↓
+
+BFS Family
+
+-----------------
+
+NO
+
+↓
+
+Need complete exploration only?
+
+↓
+
+Traversal DFS
+
+-----------------
+
+Need information from parent?
+
+↓
+
+Top Down
+
+-----------------
+
+Need information from children?
+
+↓
+
+Bottom Up
+
+-----------------
+
+Need to try choices?
+
+↓
+
+Backtracking
+
+-----------------
+
+Need cycle detection?
+
+↓
+
+Gray State Plugin
+
+-----------------
+
+Need ordering after completion?
+
+↓
+
+Exit Time Plugin
+
+↓
+
+Topo Sort
+
+-----------------
+
+Need subtree intervals?
+
+↓
+
+Euler Tour Plugin
+
+-----------------
+
+Need bridge/articulation?
+
+↓
+
+Low Link Plugin
+```
 
 
 
