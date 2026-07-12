@@ -598,3 +598,266 @@ Immediately
 
 Kruskal or Prim.
 
+
+
+
+# Pattern 2
+
+## Minimum Cost to Connect Points
+
+One of the most famous interview questions.
+
+Given
+
+```
+(x,y)
+```
+
+coordinates.
+
+Weight
+
+```
+Manhattan Distance
+```
+
+Need minimum cost.
+
+Looks geometric
+
+
+
+
+
+# Pattern 3
+
+## Cycle Removal
+
+Suppose graph is already connected.
+
+Need to remove expensive unnecessary edges.
+
+Question.
+
+What remains?
+
+A tree.
+
+Which tree?
+
+Cheapest one.
+
+↓
+
+MST.
+
+This is just the reverse viewpoint.
+
+Instead of
+
+Adding edges,
+
+you're
+
+Removing useless ones.
+
+Same answer.
+
+
+
+
+# Pattern 4
+
+## Road Upgrade Problems
+
+Already have roads.
+
+Can build new roads.
+
+Need cheapest total network.
+
+Still
+
+↓
+
+MST.
+
+Existing roads often become
+
+Weight = 0
+
+or
+
+Already unioned in DSU.
+
+Beautiful DSU application
+
+
+
+
+
+# Pattern 5
+
+## Forbidden / Mandatory Edges
+
+Interview twist.
+
+Some edges
+
+Must be included.
+
+Easy.
+
+Union them first.
+
+Then run Kruskal.
+
+---
+
+Some edges
+
+Cannot be used.
+
+Easy.
+
+Ignore them.
+
+Run Kruskal.
+
+Nothing changes.
+
+---
+
+# Pattern 6
+
+## Second Best MST
+
+Very popular.
+
+Need
+
+Not minimum.
+
+Need
+
+Second minimum.
+
+
+
+
+# Pattern 7
+
+## Dynamic MST (Advanced)
+
+Edges added.
+
+Edges removed.
+
+Need MST repeatedly.
+
+Normal Kruskal becomes too slow.
+
+Advanced structures.
+
+Usually competitive programming.
+
+Just know it exists.
+
+
+
+
+
+# Problems to Practice
+
+### Beginner
+
+- Connecting Cities With Minimum Cost
+- Minimum Cost to Connect All Points
+- Kruskal MST (GFG)
+- MST on weighted graph
+
+---
+
+### Medium
+
+- Optimize Water Distribution in a Village
+- Min Cost to Repair Roads
+- Redundant Connection (compare with pure DSU)
+- Connecting Network Cables
+
+---
+
+### Advanced
+
+- Critical and Pseudo-Critical Edges in MST ⭐⭐⭐⭐⭐
+- Second Best MST
+- Dynamic MST
+- Offline MST Queries
+
+
+
+# Recognition Guide
+
+This is the real takeaway.
+
+When reading a problem, ask:
+
+### Question 1
+
+Do I need
+
+One destination
+
+or
+
+Everyone?
+
+
+ ONE DESTN == SHORTETS PATH
+ EVEYRONE == MST 
+
+
+### Question 2
+
+Do I need
+
+Minimum path
+
+or
+
+Minimum total network cost
+
+MINM PATH DJISKTRA , MNINM TOAL NETWORK COST MST 
+
+
+
+### Question 3
+
+Is the graph undirected?
+
+Usually yes
+
+↓
+
+MST.
+
+Directed graphs generally don't have the standard MST problem (they have a different concept called minimum spanning arborescence
+
+
+
+
+IF U CONFIMR MST 
+
+THEN IF ITS SPARSE GRAPH THEN KRUSKAL
+DENSE GRAPH THEN PRIMS
+
+
+Many people say:
+
+> Sparse → Kruskal  
+> Dense → Prim
+
+That's **only a performance guideline**, **not** the recognition rule.
+
+The real recognition flow is:
+
