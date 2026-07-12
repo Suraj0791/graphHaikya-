@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 GRAPH ROADMAP.md",
+                "file": "7 CYCLE DETECTION.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "0 GRAPH ROADMAP"
+              "title": "7 CYCLE DETECTION"
             }
           }
         ],
@@ -201,6 +201,7 @@
   },
   "active": "41557cab8fc3a3fc",
   "lastOpenFiles": [
+    "0 GRAPH ROADMAP.md",
     "confusions clear/graph.md",
     "7 CYCLE DETECTION.md",
     "7 TOPO.md",
@@ -208,7 +209,6 @@
     "5 dfs bible.md",
     "08EULER LINK SCC.md",
     "09 EULER LL SCC.md",
-    "0 GRAPH ROADMAP.md",
     "1GRPAH 01 BASICS BRUSH UP.md",
     "confusions clear/1_REC STACK PASS VALUE VARIBALE CONFUSION.md",
     "10 EULER SCC.md",
