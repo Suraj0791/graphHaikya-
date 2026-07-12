@@ -374,3 +374,44 @@ vector<int> visited(n, 0);
 
 
 
+
+# LC 841 - Keys and Rooms (My Confusion)
+
+## Wrong Thinking
+
+I saw the function returns `bool`, so I assumed the helper `dfs()` should also return `bool`.
+
+---
+
+## Fix
+
+Don't choose the DFS return type based on the **problem's return type**.
+
+Choose it based on **whether the parent DFS needs information from the child**.
+
+- Parent needs child's result (`area`, `paths`, `height`, `valid`, etc.) → return `int` / `bool`.
+- Parent only wants the child to **traverse and mark visited** → `void`.
+
+In this problem:
+
+```cpp
+dfs(neighbour);
+```
+
+The parent doesn't use any returned value.
+
+So:
+
+```cpp
+void dfs(...)
+```
+
+After traversal, simply check:
+
+```cpp
+all visited ? true : false;
+```
+
+> **Rule:** DFS return type depends on the **information flow between recursive calls**, not on the final answer type of the problem.
+
+

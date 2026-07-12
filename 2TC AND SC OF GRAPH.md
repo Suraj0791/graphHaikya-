@@ -58,3 +58,419 @@ _Time = N baar node par gaye **+** Total mila kar E baar loop chala =_ **`O(N
 
 
 
+
+
+
+
+
+
+
+
+# Step 1: Always identify
+
+- **V** = Number of Vertices (nodes)
+- **E** = Number of Edges
+
+Everything is built from these two.
+
+---
+
+# DFS / BFS
+
+### Mental picture
+
+Every node is visited **once**.
+
+Every edge is explored **once** (undirected: effectively twice in adjacency lists, but still **O(E)**).
+
+So
+
+```
+Time = O(V + E)
+```
+
+### Easy memory
+
+> **Visit Nodes + Traverse Edges**
+
+```
+O(V + E)
+```
+
+---
+
+### Space
+
+Visited array
+
+```
+O(V)
+```
+
+DFS recursion stack / BFS queue
+
+Worst case
+
+```
+O(V)
+```
+
+Total
+
+```
+O(V)
+```
+
+---
+
+# Dijkstra (Priority Queue)
+
+Think
+
+```
+Normal BFS
+
++
+
+Priority Queue
+```
+
+BFS
+
+```
+O(V+E)
+```
+
+Priority Queue operations
+
+Every edge can cause a push.
+
+Each push/pop
+
+```
+log V
+```
+
+Therefore
+
+```
+O((V+E)logV)
+```
+
+Usually written as
+
+```
+O(E log V)
+```
+
+because
+
+```
+E ≥ V-1
+```
+
+for connected graphs.
+
+---
+
+Space
+
+```
+visited
+
+dist
+
+priority queue
+
+=
+O(V)
+```
+
+(PQ can temporarily hold more entries because of duplicate relaxations, but for interviews you typically state `O(V)` auxiliary plus graph storage. If discussing the priority queue itself in detail, it can grow to `O(E)` entries.)
+
+---
+
+# Bellman Ford
+
+Relax
+
+```
+E edges
+```
+
+Repeat
+
+```
+V-1 times
+```
+
+So
+
+```
+O(VE)
+```
+
+---
+
+# Floyd Warshall
+
+Three nested loops
+
+```
+k
+ i
+  j
+```
+
+So
+
+```
+O(V³)
+```
+
+Space
+
+```
+O(V²)
+```
+
+---
+
+# Topological Sort
+
+DFS
+
+```
+O(V+E)
+```
+
+Kahn's BFS
+
+```
+O(V+E)
+```
+
+---
+
+# Cycle Detection
+
+DFS
+
+```
+O(V+E)
+```
+
+BFS (Kahn)
+
+```
+O(V+E)
+```
+
+---
+
+# DSU
+
+One operation
+
+```
+≈ O(1)
+```
+
+Actually
+
+```
+O(α(N))
+```
+
+where `α` (inverse Ackermann) grows so slowly that it's treated as constant.
+
+If processing
+
+```
+E edges
+```
+
+Total
+
+```
+O(E α(V))
+≈ O(E)
+```
+
+---
+
+# MST
+
+## Kruskal
+
+Sort edges
+
+```
+O(E log E)
+```
+
+DSU
+
+```
+O(E)
+```
+
+Total
+
+```
+O(E log E)
+```
+
+---
+
+## Prim
+
+Priority Queue
+
+```
+O(E log V)
+```
+
+---
+
+# 0-1 BFS
+
+Deque operations
+
+```
+O(1)
+```
+
+Every edge once
+
+```
+O(V+E)
+```
+
+---
+
+# SCC (Kosaraju)
+
+Two DFS
+
+```
+2 × O(V+E)
+```
+
+Still
+
+```
+O(V+E)
+```
+
+---
+
+# Tarjan (SCC / Bridges / Articulation)
+
+One DFS
+
+```
+O(V+E)
+```
+
+---
+
+# Interview Trick (95% of graph problems)
+
+Ask yourself:
+
+### Am I traversing each node once?
+
+Yes
+
+↓
+
+### Am I traversing each edge once?
+
+Yes
+
+↓
+
+**Time = `O(V + E)`**
+
+---
+
+### Is there a Priority Queue?
+
+Yes
+
+↓
+
+Multiply by
+
+```
+log V
+```
+
+---
+
+### Am I sorting edges?
+
+Yes
+
+↓
+
+Add
+
+```
+E log E
+```
+
+---
+
+### Am I relaxing every edge V−1 times?
+
+Yes
+
+↓
+
+```
+VE
+```
+
+---
+
+### Three nested loops over vertices?
+
+Yes
+
+↓
+
+```
+V³
+```
+
+---
+
+# The Cheat Sheet
+
+|Algorithm|Time|Space|Memory Trick|
+|---|---|---|---|
+|DFS|`O(V+E)`|`O(V)`|Visit every node & edge once|
+|BFS|`O(V+E)`|`O(V)`|Same as DFS|
+|Topo DFS|`O(V+E)`|`O(V)`|DFS|
+|Kahn|`O(V+E)`|`O(V)`|BFS|
+|Cycle Detection|`O(V+E)`|`O(V)`|DFS/BFS|
+|Dijkstra|`O(E log V)`|`O(V)`*|DFS/BFS + Priority Queue|
+|0-1 BFS|`O(V+E)`|`O(V)`|BFS + Deque|
+|Bellman-Ford|`O(VE)`|`O(V)`|Relax all edges `V-1` times|
+|Floyd-Warshall|`O(V³)`|`O(V²)`|3 nested loops|
+|Kruskal|`O(E log E)`|`O(V)`|Sort edges + DSU|
+|Prim|`O(E log V)`|`O(V)`*|Dijkstra for MST|
+|Kosaraju|`O(V+E)`|`O(V)`|Two DFS|
+|Tarjan|`O(V+E)`|`O(V)`|One DFS|
+
+*The auxiliary arrays are `O(V)`. If you account for duplicate entries in the priority queue, its size can reach `O(E)` in the common implementation without decrease-key.
+
+## One-line interview heuristic
+
+> **Traverse once → `O(V+E)`**  
+> **Add a Priority Queue → `× log V`**  
+> **Sort edges → `E log E`**  
+> **Repeat over all vertices → `VE`**  
+> **Triple nested vertex loops → `V³`**
