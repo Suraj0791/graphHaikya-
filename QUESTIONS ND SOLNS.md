@@ -119,3 +119,51 @@ Always ask the interviewer this clarifying question before writing code for grid
 
 
 
+For the first solution (where you permanently flip `'1'` to `'0'` without extra arrays):
+
+- **Time Complexity (TC):** \(\mathcal{O}(M \times N)\)
+    - \(M\) is the number of rows, and \(N\) is the number of columns.
+    - **Why:** You visit every cell in the grid at least once via the nested loops. The DFS function only processes land cells (`'1'`), turning them to `'0'`. Because they become `'0'`, the DFS never revisits them. Each cell is looked at a constant number of times (at most 4 neighbor checks)
+- **Space Complexity (SC):** \(\mathcal{O}(M \times N)\) _in the worst case_.
+    - **Why:** Even though you didn't create a new array, DFS uses the **system call stack** for recursion. In the worst-case scenario (e.g., the entire grid is filled with land `'1'`), the recursion will dive through the entire grid in a single snake-like path, putting all \(M \times N\) cells onto the call stack at once. 
+
+---
+
+
+
+How to Easily Find TC and SC in Graph Problems
+
+You can figure out graph complexities easily by tracking two components: **Vertices (\(V\))** and **Edges (\(E\))**. In a grid problem, a cell is a Vertex, and the connections to its neighbors are the Edges.
+
+
+
+### 1. Easy Trick for Time Complexity
+
+The rule of thumb for almost all standard graph traversals (DFS / BFS) is:  
+
+$$TC = O(V + E)$$
+
+* **Find $V$ (Vertices):** Count how many total nodes exist. In a grid, $V = M \times N$.
+* **Find $E$ (Edges):** Count how many connections each node has. In a grid, each cell connects to at most 4 neighbors. So, $E \le 4 \times (M \times N)$, which simplifies to $O(M \times N)$.
+* **Combine them:** $O(V + E) \to O(M \times N + 4(M \times N)) \to O(M \times N)$.
+
+> [!TIP]
+> **Shortcut question to ask yourself:** *"What is the maximum number of times any single node or edge can be processed?"* If the answer is "once" or "a constant number of times", your TC is simply linear to the size of the graph.
+
+---
+
+### 2. Easy Trick for Space Complexity
+
+Space complexity in graphs always comes down to:
+**Storage structures** (Data structures you build) + **Traversal state** (The Call Stack for DFS, or the Queue for BFS). 
+
+* **For DFS:** The space is determined by the **maximum depth** of the recursion tree.
+	* *Worst Case:* The graph is a straight line. Maximum depth = total number of vertices = $O(V) = O(M \times N)$.
+	* *Best/Average Case:* The graph is highly balanced or disconnected. 
+* **For BFS:** The space is determined by the **maximum width** of the graph (the largest number of nodes sitting in the queue at one single time).
+	* *Worst Case:* For a grid, the queue grows widest along the diagonal, which takes roughly $O(\min(M, N))$ or $O(M + N)$ space.
+
+
+
+
+
