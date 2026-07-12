@@ -258,3 +258,54 @@ ans = max(ans, dfs(i, j, grid));
 - Need valid/invalid, cycle, etc. → `bool`
 
 > **Mental Model:** A DFS call explores one connected component (or state) and returns the information the caller needs.
+
+
+
+
+# LC 463 - Island Perimeter (My Initial Confusion)
+
+## Initial Mistake
+I immediately treated it like **LC 695 - Max Area of Island** because both are DFS on an island.
+
+I started thinking:
+- "How do I count the perimeter while DFS goes deep?"
+- I was focusing on the traversal instead of **what the problem asks me to compute**.
+
+---
+
+## Fix
+
+Before writing DFS, first identify:
+
+> **What information should one DFS return after exploring this island?**
+
+- LC 695 → Return **Area**
+- LC 463 → Return **Perimeter**
+
+Once the required information is clear, the DFS becomes obvious.
+
+```cpp
+// Area
+int area = 1;
+
+// Perimeter
+int perimeter = 0;
+```
+
+For each side:
+- Outside grid → `+1`
+- Water → `+1`
+- Unvisited land → `perimeter += dfs(neighbour)`
+
+---
+
+## Lesson
+
+> **Don't pattern-match the previous problem. Pattern-match the information you need to compute.**
+
+Same DFS traversal, different information returned.
+
+
+## My Confusion I thought: > "If I recurse into a neighbour, DFS will go deep inside the island. Then how will I finish processing the current cell?" I felt the current cell would be "lost". --- ## Reality A recursive call **pauses** the current DFS, explores the neighbour completely, **returns**, and then execution **continues from the next line**. ```cpp perimeter += dfs(neighbour); // <-- resumes here after neighbour finishes ``` The current cell always gets to process **all 4 neighbours**.
+
+
