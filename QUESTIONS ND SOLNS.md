@@ -167,3 +167,94 @@ Space complexity in graphs always comes down to:
 
 
 
+
+
+
+2 MAX AREA OF ISLAND 
+
+
+# LC 695 - Max Area of Island (DFS Learning)
+
+## Mistake 1
+- Used global `count` but **forgot to reset** before every new island.
+- Fix:
+```cpp
+count = 0;
+dfs(i, j, grid);
+```
+
+
+FIX :
+
+So before every DFS,
+
+```
+count = 0;
+dfs(i,j,grid);
+area = max(area
+```
+
+---
+
+## Mistake 2
+- Initialized answer as `1`.
+- If grid has no islands, answer should be `0`.
+
+```cpp
+int ans = 0;
+```
+
+
+
+---
+
+## Better DFS Pattern (Preferred)
+
+### Think before writing DFS:
+
+> **After this DFS finishes exploring one connected component, what information should it return?**
+
+For this problem:
+
+- DFS explores **one island**
+- Information needed = **Area**
+- Therefore:
+
+```cpp
+int dfs(...)
+```
+
+instead of
+
+```cpp
+void dfs(...)
+```
+
+### Pattern
+
+```cpp
+int dfs(...) {
+    mark visited;
+
+    int area = 1;
+
+    for (each neighbour)
+        area += dfs(neighbour);
+
+    return area;
+}
+```
+
+Caller:
+
+```cpp
+ans = max(ans, dfs(i, j, grid));
+```
+
+## DFS Return Rule
+
+- Need nothing → `void`
+- Need area/component size → `int`
+- Need valid/invalid, cycle, etc. → `bool`
+
+> **Mental Model:** A DFS call explores one connected component (or state) and returns the information the caller needs.
