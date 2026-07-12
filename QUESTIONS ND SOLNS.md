@@ -309,3 +309,68 @@ Same DFS traversal, different information returned.
 ## My Confusion I thought: > "If I recurse into a neighbour, DFS will go deep inside the island. Then how will I finish processing the current cell?" I felt the current cell would be "lost". --- ## Reality A recursive call **pauses** the current DFS, explores the neighbour completely, **returns**, and then execution **continues from the next line**. ```cpp perimeter += dfs(neighbour); // <-- resumes here after neighbour finishes ``` The current cell always gets to process **all 4 neighbours**.
 
 
+
+
+
+# LC 547 - Number of Provinces (My Confusion)
+
+## Confusion 1: Neighbour Generation
+
+I was thinking in terms of a **grid** (`dx`, `dy`), but this is an **adjacency matrix**.
+
+Fix:
+
+```cpp
+for (int v = 0; v < n; v++) {
+    if (isConnected[u][v] == 1 && !visited[v])
+        dfs(v);
+}
+```
+
+> **Graph representation decides neighbour generation.**
+- Grid → `dx/dy`
+- Adjacency Matrix → iterate entire row
+- Adjacency List → iterate `adj[u]`
+
+---
+
+## Confusion 2: Why Outer Loop?
+
+One DFS explores **only one connected component (province)**.
+
+The outer loop ensures we start DFS from every **unvisited** city, so every province gets explored.
+
+```cpp
+for (each city)
+    if (!visited)
+        dfs(city), provinces++;
+```
+
+---
+
+## Confusion 3: Why Separate `visited[]`?
+
+Unlike a grid, the adjacency matrix stores **edges**, not node states.
+
+Changing `isConnected` would modify the graph itself.
+
+So keep graph unchanged and track visited nodes separately.
+
+```cpp
+vector<int> visited(n, 0);
+```
+
+---
+
+## Recognition
+
+> **Always ask:** How are neighbours represented?
+
+- Grid → `dx/dy`
+- Matrix Graph → scan row
+- Adjacency List → iterate list
+
+
+
+
+
