@@ -415,3 +415,43 @@ all visited ? true : false;
 > **Rule:** DFS return type depends on the **information flow between recursive calls**, not on the final answer type of the problem.
 
 
+
+
+
+
+QUESTION possible-bipartition
+
+
+
+## Recognition Pattern
+
+Whenever you read:
+
+- Split into **2 groups**
+- Divide into **2 teams**
+- Red / Blue
+- Boys / Girls
+- Left / Right
+- Enemy pairs
+- Dislikes
+- Opposite sets
+
+Immediately think
+
+```
+2-coloring
+```
+
+OR BIPARTITE THATS IT 
+
+
+## Outer Loop
+
+Don't forget.
+
+Graph may be disconnected.
+
+
+
+**Possible Bipartition (LC 886)** is essentially **LeetCode 785 (Is Graph Bipartite?)** with the graph given as an edge list instead of an adjacency list. The first step is simply to build the adjacency list from the `dislikes` array, then run the standard two-color DFS/BFS
+
